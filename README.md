@@ -3,7 +3,7 @@ macro for ps4 pro
 
 # HowTo
 This is python + selenium project to buy ps4 pro automatically.
-fill following 4 constants with yours then run 'python <script name>'
+fill following 4 constants with yours then run python <script name>
 
 ITEMURL = ""
 USERID = ""
