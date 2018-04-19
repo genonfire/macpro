@@ -12,37 +12,37 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 # Constant
-HOMEPAGE = "http://www.atgame.kr/"
-PS4PRO = "http://www.atgame.kr/product/product_view.game?item=1103012016&cat=010601"
-DUALSHOCK4GOLD = "http://www.atgame.kr/product/product_view.game?item=1103012058&cat="
-ITEMURL = PS4PRO
+HOMEPAGE = "https://www.atgame.kr/ssl/member/login.atg?login_rtn="
+THESHOW = "http://www.atgame.kr/product/view.atg?item=1103012355"
+GOW4 = "http://www.atgame.kr/product/view.atg?item=1103012359"
+
+ITEMURL = GOW4
 
 USERID = ""
 PASSWORD = ""
 NAME = u""
 
 ###############################################
-REALORDER = True # True to order automatically
+REALORDER = True  # True to order automatically
 ###############################################
 
 WAITTIME = 1000
 SLEEPSEC = 1
-LOOP = -1 # -1 for infinite
+LOOP = -1  # -1 for infinite
 
 
 # Logic
 def login(driver):
     try:
-        userid = driver.find_element(By.NAME, 'userid')
-        # userid = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.NAME,'userid')))
-        passwd = driver.find_element(By.NAME, 'userpwd')
-        button = driver.find_element_by_xpath("//form[@name='FRMLOGINTOP']/input[4]")
+        userid = driver.find_element(By.ID, 'id')
+        passwd = driver.find_element(By.ID, 'pw')
+        button = driver.find_element(By.ID, 'btn-login')
         userid.send_keys(USERID)
         passwd.send_keys(PASSWORD)
         button.click()
 
         # wait until logged-in
-        logout = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, "//img[@class='btn_logout']")))
+        logout = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, "//a[@href='http://www.atgame.kr/biz/member/logout.atg']")))
     except NoSuchElementException:
         try:
             username = driver.find_element_by_xpath("//div[@class='login']/strong[1]")
@@ -52,9 +52,7 @@ def login(driver):
 
 def checkStock(driver, i):
     try:
-        # outofstock = driver.find_element_by_class_name('order_desc')
-        # print('[%d]%s' % (i, outofstock.get_attribute("innerHTML")))
-        buybutton = driver.find_element_by_xpath("//div[@class='order_btn']/img[@src='/images/product/btn_cart.gif']")
+        buybutton = driver.find_element_by_xpath("//button[@id='btn-order']")
         print "Go! Checkout~"
         return False
     except NoSuchElementException:
@@ -62,15 +60,8 @@ def checkStock(driver, i):
         return True
 
 def checkout(driver):
-    cartbutton = WebDriverWait(driver, WAITTIME).until(EC.presence_of_element_located((By.XPATH, "//div[@class='order_btn']/img[1]")))
-    cartbutton.click()
-    cartarea = WebDriverWait(driver, WAITTIME).until(EC.presence_of_element_located((By.CLASS_NAME, "cart_area")))
-    try:
-        orderbutton = WebDriverWait(driver, WAITTIME).until(EC.presence_of_element_located((By.XPATH, "//div[@class='btn_right'][1]/img[1]")))
-        print(orderbutton.get_attribute("innerHTML"))
-        orderbutton.click()
-    except NoSuchElementException, e:
-        print e
+    orderbutton = WebDriverWait(driver, WAITTIME).until(EC.presence_of_element_located((By.XPATH, "//button[@id='btn-order']")))
+    orderbutton.click()
 
 def closePopups(driver):
     try:
@@ -83,34 +74,11 @@ def closePopups(driver):
 def order(driver):
     try:
         # 주문고객과 동일한 주소 선택
-        addressradio = WebDriverWait(driver, WAITTIME).until(EC.presence_of_element_located((By.XPATH, "//input[@name='same'][@value='1']")))
+        addressradio = WebDriverWait(driver, WAITTIME).until(EC.presence_of_element_located((By.XPATH, "//input[@id='chk-ord']")))
         addressradio.click()
 
-        # 할인혜택 받기
-        point = WebDriverWait(driver, WAITTIME).until(EC.presence_of_element_located((By.NAME, "NowUsePoint")))
-        mypoint = int(point.get_attribute("value"))
-        print "point: %d" % mypoint
-        if (mypoint > 100):
-            pointbutton = WebDriverWait(driver, WAITTIME).until(EC.presence_of_element_located((By.ID, "img_direct_use")))
-            pointbutton.click()
-
-        # 무통장입급
-        bankradio = WebDriverWait(driver, WAITTIME).until(EC.presence_of_element_located((By.XPATH, "//input[@name='rdo_payment'][@value='Z']")))
-        bankradio.click()
-
-        # 은행선택
-        try:
-            bankselect = driver.find_element_by_xpath("//select[@name='bank2code']/option[@value='하나은행']")
-            bankselect.click()
-        except NoSuchElementException, e:
-            bankselect = WebDriverWait(driver, WAITTIME).until(EC.presence_of_element_located((By.XPATH, "//select[@name='bank2code']/option[@value='국민은행']")))
-            bankselect.click()
-        # 이름
-        payer = driver.find_element(By.NAME, 'payer')
-        payer.send_keys(NAME)
-
         # 결제하기
-        placebutton = WebDriverWait(driver, WAITTIME).until(EC.presence_of_element_located((By.XPATH, "//div[@class='btn_payment']/img[@class='first']")))
+        placebutton = WebDriverWait(driver, WAITTIME).until(EC.presence_of_element_located((By.XPATH, "//button[@id='btn-order']")))
         if REALORDER:
             placebutton.click()
         else:
