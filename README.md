@@ -16,18 +16,18 @@ NAME = u""
 
 # How to make my own macro using python+selenium Tutorial
 1. setting python and selenium
-http://gencode.me/1019
+https://gencode.me/blogs/post/43/
 
 2. creating scenario
-http://gencode.me/1039
+https://gencode.me/blogs/post/44/
 
 3. auto login
-http://gencode.me/1044
+https://gencode.me/blogs/post/45/
 
 4. checking out
-http://gencode.me/1064
+https://gencode.me/blogs/post/46/
 
 5. order
-http://gencode.me/1080
+https://gencode.me/blogs/post/47/
 
 ![screenshot](./macpro.gif?raw=true "screenshot")
